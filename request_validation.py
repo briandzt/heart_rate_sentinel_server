@@ -2,13 +2,45 @@ import numpy
 
 
 def validtype(data):
+    """Verify whether input has str or int type
+
+    Parameters
+    ----------
+    data: free term
+        variable whose type is to be determined
+
+    Returns
+    -------
+    out: bool
+        Indicate whether input has int or str type
+
+    """
     if type(data) == str or type(data) == int:
-        return True
+        out = True
+        return out
     else:
-        return False
+        out = False
+        return out
 
 
 def validpatient(info, database):
+    """Verify whether input to add new patient is valid
+
+    Parameters
+    ----------
+    info: dict
+        Contains information of the new patient to be added
+
+    database: dict
+        Patient database. Contains dictionary of each patients
+
+    Returns
+    -------
+    out: int
+        indicating the verification process is done, and no errors
+        are raised.
+
+    """
     if ("patient_id" in info and
             "attending_email" in info and
             "user_age" in info):
@@ -19,7 +51,8 @@ def validpatient(info, database):
                     type(info["attending_email"]) == str and
                     str(info["user_age"]).strip().isdigit()):
                 if str(info["patient_id"]) not in database:
-                    return 1
+                    out = 1
+                    return out
                 else:
                     raise IndexError("patient already exist in the server")
         raise ValueError("One or more entries"
@@ -29,6 +62,23 @@ def validpatient(info, database):
 
 
 def validhr(info, database):
+    """Verify whether input for new heart rate record is valid
+
+    Parameters
+    ----------
+    info: dict
+        Contains information of the new heart rate to be added
+
+    database: dict
+        Patient database. Contains dictionary of each patients
+
+    Returns
+    -------
+    out: int
+        indicating the verification process is done, and no errors
+        are raised.
+
+    """
     if ("patient_id" in info and
             "heart_rate" in info):
         if validtype(info["patient_id"]) and validtype(info["heart_rate"]):
@@ -42,6 +92,24 @@ def validhr(info, database):
 
 
 def validtime(info, database):
+    """Verify whether specified time point for interval average
+    is valid
+
+    Parameters
+    ----------
+    info: dict
+        Contains information of the new patient to be added
+
+    database: dict
+        Patient database. Contains dictionary of each patients
+
+    Returns
+    -------
+    out: int
+        indicating the verification process is done, and no errors
+        are raised.
+
+    """
     import datetime
     key = str(info["patient_id"])
     if ("heart_rate_average_since" not in info or
@@ -51,14 +119,33 @@ def validtime(info, database):
                                "%Y-%m-%d %H:%M:%S.%f")
     if len(database[key]["HR_list"]) == 0:
         raise ValueError
-    return 1
+    out = 1
+    return out
 
 
 def validid(id, database):
+    """Verify whether input patient id is valid for get requests
+
+    Parameters
+    ----------
+    id: free term
+        User input patient_id whose type is to be determined
+
+    database: dict
+        Patient database. Contains dictionary of each patients
+
+    Returns
+    -------
+    out: int
+        indicating the verification process is done, and no errors
+        are raised.
+
+    """
     if not (validtype(id) and str(id).isdigit()):
         raise NameError("Invalid ID input")
     if str(id) not in database:
         raise IndexError("Patient ID does not exist")
     if len(database[str(id)]["HR_list"]) < 1:
         raise ValueError("Patient has no heart rate record")
-    return 1
+    out = 1
+    return out
