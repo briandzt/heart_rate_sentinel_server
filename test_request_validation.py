@@ -119,3 +119,13 @@ def test_validid(data):
         validid(2, data)
     with pytest.raises(ValueError):
         validid(5, data)
+
+
+@pytest.mark.parametrize('dtype', [('str', True),
+                                   (123, True),
+                                   ([234], False),
+                                   ({"asdf": 2}, False)])
+def test_validtype(dtype):
+    from request_validation import validtype
+    result = validtype(dtype[0])
+    assert result == dtype[1]
