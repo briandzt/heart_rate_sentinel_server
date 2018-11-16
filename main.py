@@ -21,13 +21,13 @@ def new_patient():
     from request_validation import validpatient
     info = request.get_json()
     try:
-        validpatient(info)
-        info["patient_id"] = str(info["patient_id"])
+        validpatient(info, database)
+        info["patient_id"] = str(info["patient_id"]).strip()
         info["user_age"] = int(info["user_age"])
+        info["attending_email"] = info["attending_email"].strip()
         key = info["patient_id"]
         info["HR_list"] = []
         info["Timestamp"] = []
-        info["heart_rate_average_since"] = ""
         database[key] = info
         return "Submission Accepted"
     except NameError:
@@ -37,6 +37,9 @@ def new_patient():
         return jsonify({"ValueError":
                         "One or more entries"
                         " contain unexpected value"})
+    except IndexError:
+        return jsonify({"IndexError":
+                        "patient already exist in the server"})
 
 
 @app.route("/api/heart_rate", methods=["POST"])
@@ -55,6 +58,8 @@ def new_hr():
         validhr(info, database)
         time = datetime.datetime.now()
         key = str(info["patient_id"])
+        if type(info["heart_rate"]) == str:
+            info["heart_rate"] = info["heart_rate"].strip()
         database[key]["HR_list"].append(int(info["heart_rate"]))
         database[key]["Timestamp"].append(time)
         status = tachycardic(info["heart_rate"], database[key]["user_age"])
@@ -89,9 +94,9 @@ def avg_interval():
                 "Error": "Specified time is larger "
                          "than all timestamps of this patient",
             })
-        except KeyError:
+        except NameError:
             return jsonify({
-                "KeyError": "Invalid time entry"
+                 "NameError": "Invalid time entry"
             })
         except ValueError:
             return jsonify({
@@ -104,6 +109,10 @@ def avg_interval():
     except ValueError:
         return jsonify({
             "ValueError": "Patient does not have any record"
+        })
+    except NameError:
+        return jsonify({
+            "Error": "Invalid ID input"
         })
 
 
@@ -138,6 +147,10 @@ def get_stat(patient_id):
         return jsonify({
             "Error": "Patient does not have any record"
         })
+    except NameError:
+        return jsonify({
+            "Error": "Invalid ID input"
+        })
 
 
 @app.route("/api/heart_rate/<patient_id>", methods=["GET"])
@@ -156,6 +169,10 @@ def get_hr(patient_id):
     except ValueError:
         return jsonify({
             "Error": "Patient does not have any record"
+        })
+    except NameError:
+        return jsonify({
+            "Error": "Invalid ID input"
         })
 
 
@@ -177,6 +194,10 @@ def get_avg_hr(patient_id):
     except ValueError:
         return jsonify({
             "Error": "Patient does not have any record"
+        })
+    except NameError:
+        return jsonify({
+            "Error": "Invalid ID input"
         })
 
 
