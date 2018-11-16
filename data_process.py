@@ -2,15 +2,21 @@ from sendgrid.helpers.mail import *
 
 
 def tachycardic(hr, age):
-    """
+    """Determine whether patient's heart shows tachycardia
 
     Parameters
     ----------
-    hr
-    age
+    hr: str or int
+        heart rate of the patient
+
+    age: int
+        age of the patient
 
     Returns
     -------
+    out: str
+        "Negative" if heart rate does not show tachycardia
+        "Positive" if heart rate shows tachycardia
 
     """
     out = "Negative"
@@ -35,14 +41,18 @@ def tachycardic(hr, age):
 
 
 def avg_hr(hr):
-    """
+    """Calculate average heart rate based on all recorded
+    heart rate
 
     Parameters
     ----------
-    hr
+    hr: list
+        list of integer containing all recorded heart rate
 
     Returns
     -------
+    avg: float
+        2-decimal-place float indicating average heart rate
 
     """
     import numpy as np
@@ -51,6 +61,25 @@ def avg_hr(hr):
 
 
 def get_intv_avg(database, time):
+    """Determine average heart rate in the interval of specified
+    time point to the last recorded heart rate.
+
+    Parameters
+    ----------
+    database: dict
+        Dictionary containing all patients related data. Each entry is
+        a dictionary containing all information of a single patient.
+
+    time: str
+        String with the standard format of a printed datetime object
+        in the form of "year-month-day hour:minute:second.microsecond"
+
+    Returns
+    -------
+    avg: float
+        2-decimal-place float indicating average heart rate
+
+    """
     import numpy as np
     import datetime
     reftime = datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
@@ -67,6 +96,19 @@ def get_intv_avg(database, time):
 
 
 def send_an_email(info):
+    """Send warning email to specified email address
+
+    Parameters
+    ----------
+    info: dict
+        dictionary containing infomation of a single patient
+
+    Returns
+    -------
+    result: str
+        String indicating that email is sent
+
+    """
     import sendgrid
     import os
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
@@ -84,3 +126,5 @@ def send_an_email(info):
                                     ))
     mail = Mail(from_email, subject, to_email, content)
     response = sg.client.mail.send.post(request_body=mail.get())
+    result = "Email sent"
+    return result
