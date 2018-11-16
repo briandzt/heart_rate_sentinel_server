@@ -28,4 +28,6 @@ Additional features:
 * The program is designed to be able to tolerate input numbers
 to be in both string or int format. It is also able to tolerate accidental spaces
 if the input is in string.
+* The code on github uses local server, however the version running on the VM uses
+the host address of the VM which is _vcm-7306.vm.duke.edu_
 
