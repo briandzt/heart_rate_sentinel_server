@@ -55,8 +55,12 @@ def validpatient(info, database):
                     return out
                 else:
                     raise IndexError("patient already exist in the server")
-        raise ValueError("One or more entries"
-                         " contain unexpected value")
+            else:
+                raise ValueError("One or more entries"
+                                 " contain unexpected value")
+        else:
+            raise ValueError("One or more entries"
+                             " contain unexpected value")
     else:
         raise NameError("One or more essential entries missing")
 
@@ -85,7 +89,11 @@ def validhr(info, database):
             if (str(info["patient_id"]).strip().isdigit() and
                     str(info["heart_rate"]).strip().isdigit()):
                 return 1
-        raise ValueError("One or more entries"
+            else:
+                raise ValueError("One or more entries"
+                                 " contain unexpected value")
+        else:
+            raise ValueError("One or more entries"
                          " contain unexpected value")
     else:
         raise NameError("One or more essential entries missing")
