@@ -94,7 +94,7 @@ def validhr(info, database):
                                  " contain unexpected value")
         else:
             raise ValueError("One or more entries"
-                         " contain unexpected value")
+                             " contain unexpected value")
     else:
         raise NameError("One or more essential entries missing")
 
