@@ -14,6 +14,7 @@ def tachycardic(hr, age):
 
     """
     out = "Negative"
+    age = int(age)
     if age == 1 or age == 2:
         thresh = 151
     elif age == 3 or age == 4:
@@ -45,7 +46,7 @@ def avg_hr(hr):
 
     """
     import numpy as np
-    avg = np.mean(hr)
+    avg = round(np.mean(hr), 2)
     return avg
 
 
@@ -61,7 +62,7 @@ def get_intv_avg(database, time):
         index += 1
     if len(hr) == 0:
         raise IndexError
-    avg = np.mean(hr)
+    avg = round(np.mean(hr), 2)
     return avg
 
 
